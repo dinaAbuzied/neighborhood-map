@@ -1,0 +1,65 @@
+.list{
+    height: 100%;
+    width: 420px;
+    box-shadow: 1px 0 2px rgba(0,0,0,.25);
+    overflow: auto;
+}
+
+.list .location{
+    box-shadow: 1px 0 2px rgba(0,0,0,.25);
+    overflow: hidden;
+    -moz-transition: height .5s;
+    -ms-transition: height .5s;
+    -o-transition: height .5s;
+    -webkit-transition: height .5s;
+    transition: height .5s;
+}
+
+.list .location label.title {
+    color: rgba(0,0,0,.54);
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.list .location label.title .fa-angle-up {
+    position: absolute;
+    right: 15px;
+    -moz-transition: transform .5s;
+    -ms-transition: transform .5s;
+    -o-transition: transform .5s;
+    -webkit-transition: transform .5s;
+    transition: transform .5s;
+}
+
+.list .location.collapsed {
+    height: 40px !important;
+}
+
+.list .location.collapsed label.title .fa-angle-up {
+    transform: rotate(180deg);
+}
+
+.list .location .item {
+    color: rgba(0,0,0,.54);
+    padding: 10px;
+    position: relative;
+    border-top: 1px solid rgba(0,0,0,.2);
+    height: 40px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.list .location .item .fa-location-arrow {
+    margin-right: 10px;
+}
+
+.list .location .item.selected {
+    background: #c6dafc;
+    color: white;
+    font-weight: bold;
+}
