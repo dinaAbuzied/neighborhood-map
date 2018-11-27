@@ -28,6 +28,7 @@
     box-sizing: border-box;
 }
 
+/* the arrow icon to indicate if the location div or place div is collapsed or not */
 .list .location label.title .fa-angle-up,
 .list .places label.title .fa-angle-up {
     position: absolute;
