@@ -3,6 +3,7 @@
    background-image: url(./img/bg.png);
 }
 
+/* added as an overlay to darken the background */
 .bg-overlay {
     position: absolute;
     background: linear-gradient(to top,rgba(0,0,0,.76) 14%,rgba(0,0,0,.5) 66%);
@@ -74,6 +75,7 @@
     color: white;
 }
 
+/* instead of having the input fields and the button aside of each other, everything will take the full width */
 @media only screen and (max-width: 1000px) {
     .container {
         flex-direction: column;
