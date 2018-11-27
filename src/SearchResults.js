@@ -11,6 +11,7 @@ class SearchResults extends Component {
         name: "",
         location: "",
         results: [],
+        selectPlace: -1,
         places: [],
         position: "Loading...",
         map: undefined,
@@ -88,8 +89,8 @@ class SearchResults extends Component {
         let str = "https://api.foursquare.com/v2/venues/search?";
         str += "client_id=" + clientID;
         str += "&client_secret=" + clientSecret;
-        str += "&limit=10";
         str += "&v=20180323";
+        str += "&limit=10";
         str += "&ll=" + lat.toString() + "," + lng.toString();
         str += "&query=" + this.state.name;
 
@@ -121,12 +122,36 @@ class SearchResults extends Component {
             let place = places[index];
             let marker = new window.google.maps.Marker({
                 position: {lat: place.location.lat, lng: place.location.lng},
+                title: "marker",
                 map: map
               });
+              window.google.maps.event.addListener(marker,'click', ((marker, place, index) => { 
+                  return () => {
+                    this.setState({selectPlace: index});
+                    marker.setAnimation(window.google.maps.Animation.BOUNCE);
+                    setTimeout(() => {
+                        marker.setAnimation(null);
+                      }, 400);
+                    this.showPlaceDetails(place);
+                  }
+            })(marker, place, index));  
             markers.push(marker);
         }
 
         this.setState({markers: markers});
+    }
+
+    showPlaceDetails (place) {
+        let clientID = "QHBUGD5AWZF4Z5Y5FJO4ACVZRJKTYSMA3CGAYVZDIUSOC0OX";
+        let clientSecret = "1UU2OPCFDTOHAN3DXEW3HNP0DJNJT45DP5SEJZGXDN3YYFYP";
+
+        let str = "https://api.foursquare.com/v2/venues/";
+        str += place.id + "?";
+        str += "client_id=" + clientID;
+        str += "&client_secret=" + clientSecret;
+        str += "&v=20180323";
+
+        console.log(str);
     }
 
     render() {
@@ -151,10 +176,13 @@ class SearchResults extends Component {
                             name={this.state.name}
                             places={this.state.places}
                             selectPlace={(index) => {
+                                this.setState({selectPlace: index});
                                 let place = this.state.places[index];
                                 this.moveToLocation(place.location.lat, place.location.lng, false);
+                                this.showPlaceDetails(place);
                             }}
-                            results={this.state.results}
+                            results={this.state.results} 
+                            selectedPlace = {this.state.selectPlace}
                         />
                         <div id="map"></div>
                     </main>

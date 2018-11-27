@@ -9,8 +9,7 @@ class List extends Component {
     state = {
         loactionCollapsed: false,
         selectedLocatin: 0,
-        placesCollapsed: false,
-        selectedPlace: -1
+        placesCollapsed: false
     }
 
     render() {
@@ -56,9 +55,8 @@ class List extends Component {
                         ) : (
                             this.props.places.map((place, index) => {
                             return <div key={place.id} 
-                                        className={this.state.selectedPlace === index ? "item selected" : "item"}
+                                        className={this.props.selectedPlace === index ? "item selected" : "item"}
                                         onClick= {() => {
-                                            this.setState({selectedPlace: index});
                                             this.props.selectPlace(index);
                                             }}>
                                         <FontAwesomeIcon icon={faUtensils} />
