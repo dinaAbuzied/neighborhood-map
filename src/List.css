@@ -5,7 +5,8 @@
     overflow: auto;
 }
 
-.list .location{
+.list .location,
+.list .places{
     box-shadow: 1px 0 2px rgba(0,0,0,.25);
     overflow: hidden;
     -moz-transition: height .5s;
@@ -15,7 +16,8 @@
     transition: height .5s;
 }
 
-.list .location label.title {
+.list .location label.title,
+.list .places label.title {
     color: rgba(0,0,0,.54);
     font-weight: bold;
     display: block;
@@ -26,7 +28,8 @@
     box-sizing: border-box;
 }
 
-.list .location label.title .fa-angle-up {
+.list .location label.title .fa-angle-up,
+.list .places label.title .fa-angle-up {
     position: absolute;
     right: 15px;
     -moz-transition: transform .5s;
@@ -36,11 +39,13 @@
     transition: transform .5s;
 }
 
-.list .location.collapsed {
+.list .location.collapsed,
+.list .places.collapsed {
     height: 40px !important;
 }
 
-.list .location.collapsed label.title .fa-angle-up {
+.list .location.collapsed label.title .fa-angle-up,
+.list .places.collapsed label.title .fa-angle-up {
     transform: rotate(180deg);
 }
 
@@ -54,12 +59,39 @@
     cursor: pointer;
 }
 
-.list .location .item .fa-location-arrow {
+.list .location .item .fa-location-arrow, 
+.list .places .item .fa-utensils {
     margin-right: 10px;
 }
 
-.list .location .item.selected {
+.list .location .item.selected,
+.list .places .item.selected {
     background: #c6dafc;
     color: white;
     font-weight: bold;
+}
+
+.list .places .empty {
+    text-align: center;
+    color: rgba(0,0,0,.54);
+    height: 56px;
+    padding-top: 15px;
+    box-sizing: border-box;
+}
+
+.list .places .item {
+    color: rgba(0,0,0,.54);
+    padding: 10px;
+    position: relative;
+    border-top: 1px solid rgba(0,0,0,.2);
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 56px;
+}
+
+.list .places .item .address {
+    display: block;
+    margin-left: 23px;
+    font-size: 14px;
+    font-style: italic;
 }

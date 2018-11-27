@@ -44,3 +44,8 @@
     top: calc(50% - 30px);
     position: absolute;
 }
+
+.search-results #map {
+    height: 100%;
+    width: calc(100% - 420px);
+}

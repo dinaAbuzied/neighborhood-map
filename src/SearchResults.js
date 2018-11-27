@@ -11,7 +11,10 @@ class SearchResults extends Component {
         name: "",
         location: "",
         results: [],
-        position: "Loading..."
+        places: [],
+        position: "Loading...",
+        map: undefined,
+        markers: []
     }
 
     componentDidMount() {
@@ -20,10 +23,26 @@ class SearchResults extends Component {
         this.setState({location: values.location});
         console.clear();
 
+        if (!window.google) {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = `https://maps.google.com/maps/api/js?key=AIzaSyCKqR6ij7M9c5777bw3uIgzsxKfo2Nc2Z0&v=3`;
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+            s.addEventListener('load', e => {
+              this.onScriptLoad(values)
+            })
+          } else {
+            this.onScriptLoad(values)
+          }
+    }
+
+    onScriptLoad(values) {
         if(values.location === "nearest") {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     this.setState({position: {lat: position.coords.latitude, lng: position.coords.longitude}});
+                    this.generateMap();
                 });
             } else {
                 this.setState({position: "Geolocation is not supported by this browser."});
@@ -39,6 +58,7 @@ class SearchResults extends Component {
                     if (status === 'OK') {
                         this.setState({results: results});
                         this.setState({position: {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()}});
+                        this.generateMap();
                         console.log(status, results);
                     }
                     else {
@@ -46,6 +66,67 @@ class SearchResults extends Component {
                     }
                   }.bind(this));
         }
+    }
+
+    generateMap() {
+        var map = new window.google.maps.Map(
+            document.getElementById('map'), {center: this.state.position, zoom: 14});
+        this.setState({map: map});
+        this.getPlaces(this.state.position.lat, this.state.position.lng);
+    }
+
+    moveToLocation(lat, lng, getPlaces = true){
+        var center = new window.google.maps.LatLng(lat, lng);
+        this.state.map.panTo(center);
+        if(getPlaces) this.getPlaces(lat, lng);
+    }
+
+    getPlaces(lat, lng) {
+        let clientID = "QHBUGD5AWZF4Z5Y5FJO4ACVZRJKTYSMA3CGAYVZDIUSOC0OX";
+        let clientSecret = "1UU2OPCFDTOHAN3DXEW3HNP0DJNJT45DP5SEJZGXDN3YYFYP";
+
+        let str = "https://api.foursquare.com/v2/venues/search?";
+        str += "client_id=" + clientID;
+        str += "&client_secret=" + clientSecret;
+        str += "&limit=10";
+        str += "&v=20180323";
+        str += "&ll=" + lat.toString() + "," + lng.toString();
+        str += "&query=" + this.state.name;
+
+        console.log(str);
+
+        fetch(str)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log("result", result);
+                if(result.response.venues) {
+                    this.setState({places: result.response.venues});
+                    this.addMakers();
+                }
+            },
+            (error) => {
+                this.setState({places: error});
+                console.log("error", error);
+            }
+        )
+    }
+
+    addMakers() {
+        let markers = [];
+        let places = this.state.places;
+        let map = this.state.map;
+
+        for (let index = 0; index < places.length; index++) {
+            let place = places[index];
+            let marker = new window.google.maps.Marker({
+                position: {lat: place.location.lat, lng: place.location.lng},
+                map: map
+              });
+            markers.push(marker);
+        }
+
+        this.setState({markers: markers});
     }
 
     render() {
@@ -65,8 +146,14 @@ class SearchResults extends Component {
                         <List location={this.state.location}
                             changeLoction={(index) => {
                                 this.setState({position: {lat: this.state.results[index].geometry.location.lat(), lng: this.state.results[index].geometry.location.lng()}});
+                                this.moveToLocation(this.state.results[index].geometry.location.lat(), this.state.results[index].geometry.location.lng());
                             }}
                             name={this.state.name}
+                            places={this.state.places}
+                            selectPlace={(index) => {
+                                let place = this.state.places[index];
+                                this.moveToLocation(place.location.lat, place.location.lng, false);
+                            }}
                             results={this.state.results}
                         />
                         <div id="map"></div>
