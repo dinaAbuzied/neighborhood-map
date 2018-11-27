@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
-import { faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faLocationArrow, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import './List.css';
 
 class List extends Component {

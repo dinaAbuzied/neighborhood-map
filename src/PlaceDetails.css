@@ -1,0 +1,34 @@
+.page-details {
+    width: 500px;
+    height: calc(100% - 20px);
+    position: absolute;
+    background-color: white;
+    top: 10px;
+    left: 430px;
+    z-index: 1;   
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.page-details .close-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #777;
+}
+
+.page-details h2 {
+    margin: 0;
+    color: #333;
+}
+
+.page-details .ratings {
+    margin:  5px 0;
+}
+
+.page-details .ratings .number {
+    margin-right: 5px;
+}

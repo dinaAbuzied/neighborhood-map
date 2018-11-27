@@ -5,17 +5,19 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import './SearchResults.css';
 import List from './List';
+import PlaceDetails from './PlaceDetails';
 
 class SearchResults extends Component {
     state = {
         name: "",
         location: "",
         results: [],
-        selectPlace: -1,
+        selectedPlace: -1,
         places: [],
         position: "Loading...",
         map: undefined,
-        markers: []
+        markers: [],
+        placeObj: undefined
     }
 
     componentDidMount() {
@@ -127,7 +129,7 @@ class SearchResults extends Component {
               });
               window.google.maps.event.addListener(marker,'click', ((marker, place, index) => { 
                   return () => {
-                    this.setState({selectPlace: index});
+                    this.setState({selectedPlace: index});
                     marker.setAnimation(window.google.maps.Animation.BOUNCE);
                     setTimeout(() => {
                         marker.setAnimation(null);
@@ -152,6 +154,19 @@ class SearchResults extends Component {
         str += "&v=20180323";
 
         console.log(str);
+
+        fetch(str)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log("result", result);
+                this.setState({placeObj: result.response.venue});
+            },
+            (error) => {
+                // this.setState({places: error});
+                console.log("error", error);
+            }
+        )
     }
 
     render() {
@@ -176,14 +191,22 @@ class SearchResults extends Component {
                             name={this.state.name}
                             places={this.state.places}
                             selectPlace={(index) => {
-                                this.setState({selectPlace: index});
+                                this.setState({selectedPlace: index});
                                 let place = this.state.places[index];
                                 this.moveToLocation(place.location.lat, place.location.lng, false);
                                 this.showPlaceDetails(place);
                             }}
                             results={this.state.results} 
-                            selectedPlace = {this.state.selectPlace}
+                            selectedPlace = {this.state.selectedPlace}
                         />
+                        {this.state.placeObj &&
+                            <PlaceDetails place={this.state.placeObj}
+                                onClose={() => {
+                                    this.setState({placeObj: undefined});
+                                    this.setState({selectedPlace: -1});
+                                }}
+                            />
+                        }
                         <div id="map"></div>
                     </main>
                 )
