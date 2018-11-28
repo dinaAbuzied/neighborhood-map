@@ -13,6 +13,7 @@
     z-index: 9999;
 }
 
+/* the back button */
 .search-results>header a{
     text-decoration: none;
     color: #777;
@@ -24,6 +25,7 @@
     font-weight: bold;
 }
 
+/* the arrow icon added to the back button */
 .search-results>header a .fa-angle-left{
     position: absolute;
     left: 3px;
@@ -37,6 +39,7 @@
     flex-direction: row;
 }
 
+/* contains the message displayed if there is an error message or the page is still loading */
 .search-results h1 {
     color: #777;
     width: 100%;
@@ -45,6 +48,7 @@
     position: absolute;
 }
 
+/* contains the google map */
 .search-results #map {
     height: 100%;
     width: calc(100% - 420px);
