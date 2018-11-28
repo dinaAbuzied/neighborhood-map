@@ -16,7 +16,7 @@ class List extends Component {
           <div className="list">
             <div className={this.state.loactionCollapsed ? "collapsed location" : "location"} 
                 style={{height: this.props.results.length > 0 ? this.props.results.length * 40 + 40 : 80}}>
-                <label role="button" aria-expanded={!this.state.loactionCollapsed} className="title" onClick= {() => {
+                <label tabIndex="0" role="button" aria-expanded={!this.state.loactionCollapsed} className="title" onClick= {() => {
                     this.setState({loactionCollapsed: !this.state.loactionCollapsed})
                 }}>Location
                 <FontAwesomeIcon icon={faAngleUp} size="lg" />
@@ -26,7 +26,7 @@ class List extends Component {
                         <div className="item selected">Nearest to you</div>
                     ) : (
                         this.props.results.map((loc, index) => {
-                           return <div role="button" aria-pressed={this.state.selectedLocatin === index} key={"location" + index.toString()} 
+                           return <div tabIndex="0" role="button" aria-pressed={this.state.selectedLocatin === index} key={"location" + index.toString()} 
                                     className={this.state.selectedLocatin === index ? "item selected" : "item"}
                                     onClick= {() => {
                                         /* invoed when user selects a location, 
@@ -43,7 +43,7 @@ class List extends Component {
             </div>
             <div className={this.state.placesCollapsed ? "collapsed places" : "places"}
                 style={{height: this.props.places.length > 0 ? this.props.places.length * 56 + 40 : 96}}>
-                <label role="button" aria-expanded={!this.state.placesCollapsed} className="title" onClick= {() => {
+                <label tabIndex="0" role="button" aria-expanded={!this.state.placesCollapsed} className="title" onClick= {() => {
                     this.setState({placesCollapsed: !this.state.placesCollapsed})
                 }}>Places
                 <FontAwesomeIcon icon={faAngleUp} size="lg" />
@@ -56,10 +56,10 @@ class List extends Component {
                             <div className="empty">No Places Available</div>
                         ) : (
                             this.props.places.map((place, index) => {
-                            return <div role="button" aria-pressed={this.props.selectedPlace === index} key={place.id} 
+                            return <div tabIndex="0" role="button" aria-pressed={this.props.selectedPlace === index} key={place.id} 
                                         className={this.props.selectedPlace === index ? "item selected" : "item"}
                                         onClick= {() => {
-                                            /* invoed when user selects a place
+                                            /* invoked when user selects a place
                                             invokes the selectPlace in SearchResults component to add the selected location style 
                                             and show the placeDetails component*/
                                             this.props.selectPlace(index);
