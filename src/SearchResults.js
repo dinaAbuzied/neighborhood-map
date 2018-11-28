@@ -229,20 +229,22 @@ class SearchResults extends Component {
                 Back
                 </Link>
                { /* toggle button only shows on screen with width less than 1024 to show only one component at a time */}
-                <button tabIndex="0" className={this.state.currentScreen === "Details" ? "sm-hidden toggle-screen" : "toggle-screen"} onClick={() => {
-                        if (this.state.currentScreen === "List") this.setState({currentScreen: "Map"});
-                        else this.setState({currentScreen: "List"});
-                    }}>Switch to {(this.state.currentScreen === "List") ? (
-                        <span>
-                            <FontAwesomeIcon icon={faMapMarked} size="lg" />
-                            Map
-                        </span>
-                    ) : (
-                        <span>
-                            <FontAwesomeIcon icon={faListUl} size="lg" />
-                            List
-                        </span>
-                )}</button>
+                {window.innerWidth < 1024 && 
+                    <button tabIndex="0" className={this.state.currentScreen === "Details" ? "sm-hidden toggle-screen" : "toggle-screen"} onClick={() => {
+                            if (this.state.currentScreen === "List") this.setState({currentScreen: "Map"});
+                            else this.setState({currentScreen: "List"});
+                        }}>Switch to {(this.state.currentScreen === "List") ? (
+                            <span>
+                                <FontAwesomeIcon icon={faMapMarked} size="lg" />
+                                Map
+                            </span>
+                        ) : (
+                            <span>
+                                <FontAwesomeIcon icon={faListUl} size="lg" />
+                                List
+                            </span>
+                    )}</button>
+                }
             </header>
             {
                 (typeof this.state.position === "string") ? (
