@@ -13,7 +13,8 @@ class List extends Component {
 
     render() {
         return (
-          <div className="list">
+            // class sm-hidden only works on screen with width less than 1024 to show only one component at a time
+          <div className={this.props.currentScreen !== "List" ? "sm-hidden list" : "list"}>
             <div className={this.state.loactionCollapsed ? "collapsed location" : "location"} 
                 style={{height: this.props.results.length > 0 ? this.props.results.length * 40 + 40 : 80}}>
                 <label tabIndex="0" role="button" aria-expanded={!this.state.loactionCollapsed} className="title" onClick= {() => {

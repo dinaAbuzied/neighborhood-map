@@ -32,6 +32,23 @@
     top: -1px;
 }
 
+.search-results>header .toggle-screen {
+    border: none;
+    background: none;
+    color: #777;
+    font-weight: bold;
+    font-size: 16px;
+    float: right;
+    margin: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.search-results>header .toggle-screen svg {
+    margin: 0 5px;
+}
+
 .search-results>main{
     position: relative;
     height: calc(100% - 60px);
@@ -52,4 +69,14 @@
 .search-results #map {
     height: 100%;
     width: calc(100% - 420px);
+}
+
+@media only screen and (max-width: 1000px) {
+    .sm-hidden {
+        display: none !important;
+    }
+
+    .search-results #map {
+        width: 100%;
+    }
 }

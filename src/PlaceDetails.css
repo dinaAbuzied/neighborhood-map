@@ -95,3 +95,12 @@
 .page-details .photo img {
     width: 100%;
 }
+
+@media only screen and (max-width: 1000px) {
+    .page-details {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+    }
+}

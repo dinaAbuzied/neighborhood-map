@@ -46,7 +46,8 @@ class PlaceDetails extends Component {
 
     render() {
         return (
-            <div className="page-details">
+            // class sm-hidden only works on screen with width less than 1024 to show only one component at a time
+            <div className={this.props.currentScreen !== "Details" ? "sm-hidden page-details" : "page-details"}>
                 <button tabIndex="0" className="close-btn" onClick={() => {
                     // calls the onClose function in SearchResults to remove the PlaceDetails component
                     this.props.onClose();
