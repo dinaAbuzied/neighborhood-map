@@ -6,6 +6,11 @@ import { faFacebookSquare, faTwitterSquare, faInstagram } from '@fortawesome/fre
 import './PlaceDetails.css';
 
 class PlaceDetails extends Component {
+    /**
+     * @description creates a div holding the rating in numbers and creates five star icons,
+     *              calculates which stars are full - empty - half (ex. rating = 3.5 creates 3 full 1 half 1 empty)
+     *              note that the rating sent by foursquare api are of 10 it gets divided by 2 to show 5 stars
+     */
     setStars() {
         if(this.props.place.rating) {
             let stars = [];
@@ -24,6 +29,9 @@ class PlaceDetails extends Component {
         }
     }
 
+    /**
+     * @description creates div holding num f dollar sign icons based on the price value ( 1 is min, 4 is max)
+     */
     setPrice() {
         if(this.props.place.price) {
             let price = [];
@@ -39,7 +47,8 @@ class PlaceDetails extends Component {
     render() {
         return (
             <div className="page-details">
-                <button className="close-btn" onClick={() => {
+                <button tabIndex="0" className="close-btn" onClick={() => {
+                    // calls the onClose function in SearchResults to remove the PlaceDetails component
                     this.props.onClose();
                 }}>
                     <FontAwesomeIcon icon={faTimes} size="lg" />
