@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './Main.css';
+import fourLogo from './img/foursquare_logo.png';
+import mapsLogo from './img/maps_logo.png';
+import fontLogo from './img/font_awesome_logo.png';
 
 class Main extends Component {
     state = {
@@ -23,7 +26,7 @@ class Main extends Component {
       return (
         <div className="main">
           <div className="bg-overlay"></div>
-          <div className="container">
+          <main className="container">
             <div className="input-holder what">
               <input tabIndex="0" 
                 type="text" 
@@ -54,7 +57,18 @@ class Main extends Component {
                 search: "?name=" + this.state.name + "&location=" + this.state.location
               }}>Search</Link>
             </div>
-          </div>
+          </main>
+          <footer>
+            <a tabIndex="0" href="https://foursquare.com/" rel="noopener noreferrer" target="_blank">
+              <img src={fourLogo} alt="Powered by fouraquare"/>
+            </a>
+            <a tabIndex="0" href="https://maps.google.com/" rel="noopener noreferrer" target="_blank">
+              <img src={mapsLogo} alt="Google Maps"/>
+            </a>
+            <a tabIndex="0" href="https://fontawesome.com/" rel="noopener noreferrer" target="_blank">
+              <img className="font-awesome" src={fontLogo} alt="Font Awesome"/>
+            </a>
+          </footer>
         </div>
       );
     }
