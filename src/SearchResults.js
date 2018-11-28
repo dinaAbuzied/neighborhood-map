@@ -214,7 +214,6 @@ class SearchResults extends Component {
                 this.setState({placeObj: result.response.venue});
             },
             (error) => {
-                // TODO: show message to the use with the error
                 console.log("error", error);
             }
         )
