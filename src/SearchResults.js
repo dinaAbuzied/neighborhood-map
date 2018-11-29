@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import queryString from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faMapMarked, faListUl } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { faMapMarked, faListUl } from '@fortawesome/free-solid-svg-icons';
 import './SearchResults.css';
 import List from './List';
 import PlaceDetails from './PlaceDetails';
+import fourLogo from './img/foursquare_logo.png';
+import mapsLogo from './img/maps_logo.png';
+import fontLogo from './img/font_awesome_logo.png';
 
 class SearchResults extends Component {
     state = {
         name: "",
-        location: "",
         currentScreen: "List", // used in small screen to show one screen at a time
         results: [], // all locations avialable, used in locations list
         selectedPlace: -1, // selected place index
-        places: [], // all places available, used in places list
+        places: [], // all places available in selected location, used in places list
         position: "Loading...", // if the postion is not loaded yet will show loading message, 
                                 //if an error occured will show the error, 
                                 //else will store the selected postion
@@ -24,14 +24,11 @@ class SearchResults extends Component {
     }
 
     /**
-     * @description gets the params passed in the url (name, location),
-     *              if the google maps api script is not loaded will load it,
+     * @description if the google maps api script is not loaded will load it,
      *              call the onScriptLoad to get the location and generate the map
      */
     componentDidMount() {
-        let values = queryString.parse(this.props.location.search);
-        this.setState({name: values.name});
-        this.setState({location: values.location});
+        this.setState({name: "pizza"});
         console.clear();
 
         if (!window.google) {
@@ -41,49 +38,39 @@ class SearchResults extends Component {
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {
-              this.onScriptLoad(values)
+              this.onScriptLoad()
             })
           } else {
-            this.onScriptLoad(values)
+            this.onScriptLoad()
           }
     }
 
     /**
-     * @description if the location is set to nearest, 
-     *              will get the user location and generate a map based on this location,
-     *              if not will use the geocoder api to get all the locations with the 
-     *              same name to be added to the list and generate a map based on the first location in the results
-     * @param {object} values conatins the params passed in the url (name, location)
+     * @description uses the geocoder api to get all the locations listed in the addresses array
+     *              to be added to the list and generate a map based on the first location in the results
      */
-    onScriptLoad(values) {
-        if(values.location === "nearest") {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    this.setState({position: {lat: position.coords.latitude, lng: position.coords.longitude}});
-                    this.generateMap();
-                });
-            } else {
-                this.setState({position: "Geolocation is not supported by this browser."});
-            }
-        }
-        else {
+    onScriptLoad() {
             var geocoder = new window.google.maps.Geocoder();
-                var address = values.location;
-                geocoder.geocode(
-                  { 
-                    address: address
-                  }, function(results, status) {
-                    if (status === 'OK') {
-                        this.setState({results: results});
-                        this.setState({position: {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()}});
-                        this.generateMap();
-                        console.log(status, results);
-                    }
-                    else {
-                        this.setState({position: 'Geocode was not successful for the following reason: ' + status});
-                    }
-                  }.bind(this));
-        }
+                var addresses = ["agouza", "dokki", "zamalek"];
+               for (let index = 0; index < addresses.length; index++) {
+                   let address = addresses[index];
+                   geocoder.geocode(
+                    { 
+                      address: address
+                    }, function(results, status) {
+                      if (status === 'OK') {
+                          for (let j = 0; j < results.length; j++) {
+                              this.state.results.push(results[j]);
+                          }
+                          this.setState({position: {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()}});
+                          this.generateMap();
+                          console.log(status, results);
+                      }
+                      else {
+                          this.setState({position: 'Geocode was not successful for the following reason: ' + status});
+                      }
+                    }.bind(this));
+               }
     }
 
     /**
@@ -91,10 +78,12 @@ class SearchResults extends Component {
      *              to call the foursquare api and get a list of the nearest places
      */
     generateMap() {
-        var map = new window.google.maps.Map(
-            document.getElementById('map'), {center: this.state.position, zoom: 14});
-        this.setState({map: map});
-        this.getPlaces(this.state.position.lat, this.state.position.lng);
+        if(!this.state.map) {
+            let map = new window.google.maps.Map(
+                document.getElementById('map'), {center: this.state.position, zoom: 14});
+            this.setState({map: map});
+            this.getPlaces(this.state.position.lat, this.state.position.lng);
+        }
     }
 
     /**
@@ -154,9 +143,15 @@ class SearchResults extends Component {
     /**
      * @description this function is invoked when the location is set and 
      *              the foursquare API sends a list of places near this location
-     *              to add a marker on the map for every place
+     *              to add a marker on the map for every place, it clears first any 
+     *              prev markers on screen then adds the new ones
      */
     addMakers() {
+        for (let index = 0; index < this.state.markers.length; index++) {
+            let marker = this.state.markers[index];
+            marker.setMap(null);
+        }
+
         let markers = [];
         let places = this.state.places;
         let map = this.state.map;
@@ -223,32 +218,44 @@ class SearchResults extends Component {
         return (
           <div className="search-results">
             <header>
-                <Link tabIndex="0" to="/">
-                <FontAwesomeIcon icon={faAngleLeft} size="lg" />
-                Back
-                </Link>
+                <h1>Best Pizza Places in Giza</h1>
                { /* toggle button only shows on screen with width less than 1024 to show only one component at a time */}
                 {window.innerWidth < 1024 && 
-                    <button tabIndex="0" className={this.state.currentScreen === "Details" ? "sm-hidden toggle-screen" : "toggle-screen"} onClick={() => {
-                            if (this.state.currentScreen === "List") this.setState({currentScreen: "Map"});
-                            else this.setState({currentScreen: "List"});
-                        }}>Switch to {(this.state.currentScreen === "List") ? (
-                            <span>
-                                <FontAwesomeIcon icon={faMapMarked} size="lg" />
-                                Map
-                            </span>
-                        ) : (
-                            <span>
-                                <FontAwesomeIcon icon={faListUl} size="lg" />
-                                List
-                            </span>
-                    )}</button>
+                    
+                        <button tabIndex="0" className={this.state.currentScreen === "Details" ? "sm-hidden toggle-screen" : "toggle-screen"} onClick={() => {
+                                if (this.state.currentScreen === "List") this.setState({currentScreen: "Map"});
+                                else this.setState({currentScreen: "List"});
+                            }}>Switch to {(this.state.currentScreen === "List") ? (
+                                <span>
+                                    <FontAwesomeIcon icon={faMapMarked} size="lg" />
+                                    Map
+                                </span>
+                            ) : (
+                                <span>
+                                    <FontAwesomeIcon icon={faListUl} size="lg" />
+                                    List
+                                </span>
+                        )}</button>
+                    
                 }
             </header>
             {
                 (typeof this.state.position === "string") ? (
                     /* contains the message displayed if there is an error message or the page is still loading */
-                    <main><h1>{this.state.position}</h1></main>
+                    <main>
+                        <h2>{this.state.position}</h2>    
+                        <footer>
+                            <a className="fs-anchor" tabIndex="0" href="https://foursquare.com/" rel="noopener noreferrer" target="_blank">
+                            <img src={fourLogo} alt="Powered by fouraquare"/>
+                            </a>
+                            <a tabIndex="0" href="https://maps.google.com/" rel="noopener noreferrer" target="_blank">
+                            <img src={mapsLogo} alt="Google Maps"/>
+                            </a>
+                            <a tabIndex="0" href="https://fontawesome.com/" rel="noopener noreferrer" target="_blank">
+                            <img className="font-awesome" src={fontLogo} alt="Font Awesome"/>
+                            </a>
+                        </footer>
+                    </main>
                 ) : (
                     <main>
                         {/* contains a list of locations found by google geocoder and places found foursquare api */}

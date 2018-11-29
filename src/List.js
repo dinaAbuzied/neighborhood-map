@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faLocationArrow, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import './List.css';
+import fourLogo from './img/foursquare_logo.png';
+import mapsLogo from './img/maps_logo.png';
+import fontLogo from './img/font_awesome_logo.png';
 
 class List extends Component {
     state = {
@@ -23,23 +26,19 @@ class List extends Component {
                 <FontAwesomeIcon icon={faAngleUp} size="lg" />
                 </label>
                 {
-                    (this.props.location === "nearest") ? (
-                        <div className="item selected">Nearest to you</div>
-                    ) : (
-                        this.props.results.map((loc, index) => {
-                           return <div tabIndex="0" role="button" aria-pressed={this.state.selectedLocatin === index} key={"location" + index.toString()} 
-                                    className={this.state.selectedLocatin === index ? "item selected" : "item"}
-                                    onClick= {() => {
-                                        /* invoed when user selects a location, 
-                                            sets the selectedLocatin to the index value to add the selected location style,
-                                            invokes the changeLocation in SearchResults component to recenter the map to the selected location*/
-                                        this.setState({selectedLocatin: index});
-                                        this.props.changeLoction(index);
-                                        }}>
-                                    <FontAwesomeIcon icon={faLocationArrow} />
-                                    {loc.formatted_address}</div>
-                        })
-                    )
+                    this.props.results.map((loc, index) => {
+                        return <div tabIndex="0" role="button" aria-pressed={this.state.selectedLocatin === index} key={"location" + index.toString()} 
+                                 className={this.state.selectedLocatin === index ? "item selected" : "item"}
+                                 onClick= {() => {
+                                     /* invoed when user selects a location, 
+                                         sets the selectedLocatin to the index value to add the selected location style,
+                                         invokes the changeLocation in SearchResults component to recenter the map to the selected location*/
+                                     this.setState({selectedLocatin: index});
+                                     this.props.changeLoction(index);
+                                     }}>
+                                 <FontAwesomeIcon icon={faLocationArrow} />
+                                 {loc.formatted_address}</div>
+                     })
                 }
             </div>
             <div className={this.state.placesCollapsed ? "collapsed places" : "places"}
@@ -74,6 +73,17 @@ class List extends Component {
                     )
                 }
             </div>
+            <footer>
+                            <a className="fs-anchor" tabIndex="0" href="https://foursquare.com/" rel="noopener noreferrer" target="_blank">
+                            <img src={fourLogo} alt="Powered by fouraquare"/>
+                            </a>
+                            <a tabIndex="0" href="https://maps.google.com/" rel="noopener noreferrer" target="_blank">
+                            <img src={mapsLogo} alt="Google Maps"/>
+                            </a>
+                            <a tabIndex="0" href="https://fontawesome.com/" rel="noopener noreferrer" target="_blank">
+                            <img className="font-awesome" src={fontLogo} alt="Font Awesome"/>
+                            </a>
+                        </footer>
           </div>
         );
       }

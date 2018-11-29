@@ -13,23 +13,10 @@
     z-index: 9999;
 }
 
-/* the back button */
-.search-results>header a{
-    text-decoration: none;
+.search-results>header h1 {
     color: #777;
-    margin: 20px;
-    display: inline-block;
-    height: 20px;
-    padding-left: 20px;
-    position: relative;
-    font-weight: bold;
-}
-
-/* the arrow icon added to the back button */
-.search-results>header a .fa-angle-left{
-    position: absolute;
-    left: 3px;
-    top: -1px;
+    float: left;
+    margin: 8px 10px 0;
 }
 
 .search-results>header .toggle-screen {
@@ -52,12 +39,11 @@
 .search-results>main{
     position: relative;
     height: calc(100% - 60px);
-    display: flex;
-    flex-direction: row;
+    overflow: hidden;
 }
 
 /* contains the message displayed if there is an error message or the page is still loading */
-.search-results h1 {
+.search-results h2 {
     color: #777;
     width: 100%;
     text-align: center;
@@ -71,6 +57,36 @@
     width: calc(100% - 420px);
 }
 
+footer {
+    position: fixed;
+    bottom: 0;
+    background: #777;
+    width: 100%;
+    height: 60px;
+    padding: 15px 10px;
+    box-sizing: border-box;
+}
+
+footer a {
+    height: 30px;
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+footer a.fs-anchor {
+    height: 20px;
+}
+
+footer a img {
+    height: 100%;
+}
+
+footer a img.font-awesome {
+    background: white;
+    border-radius: 5px;
+}
+
 @media only screen and (max-width: 1000px) {
     .sm-hidden {
         display: none !important;
@@ -78,5 +94,30 @@
 
     .search-results #map {
         width: 100%;
+    }
+
+    .search-results>header h1 {
+        font-size: 22px;
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    footer {
+        height: 40px;
+        padding: 12px 10px;
+    }
+    
+    footer a {
+        height: 20px;
+        margin-right: 5px;
+    }
+
+    footer a.fs-anchor {
+        height: 15px;
+    }
+
+    .search-results>header h1 {
+        font-size: 14px;
     }
 }

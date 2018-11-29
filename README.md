@@ -18,6 +18,3 @@ To get started developing right away:
 * [Google Maps API](https://maps.google.com/)
 * [FourSquare API](https://foursquare.com/)
 * [FontAwesome icon set and toolkit](https://fontawesome.com/)
-
-## Additional resources used
-* [All Free Download](https://all-free-download.com) for background images
